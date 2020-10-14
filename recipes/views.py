@@ -1,3 +1,7 @@
 from django.shortcuts import render
+from .models import Recipe
 
-# Create your views here.
+
+def index(request):
+    recipe = Recipe.objects.order_by("-pub_date").all()
+    return render(request, 'index.html', {'recipe': recipe})
