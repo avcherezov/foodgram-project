@@ -19,7 +19,7 @@ class TagsAdmin(admin.ModelAdmin):
 
 
 class IngredientsAdmin(admin.ModelAdmin):
-    list_display = ("pk", 'title', 'unit') 
+    list_display = ("pk", 'title', 'dimension') 
     empty_value_display = '-пусто-'
 
 

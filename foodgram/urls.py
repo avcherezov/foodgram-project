@@ -15,10 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
+from django.conf.urls.static import static
+from recipes.utils import get_ingredients_new
+
 
 urlpatterns = [
     #path("auth/", include("users.urls")),
     path("auth/", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
+    path('ingredients/', get_ingredients_new, name='ingredients'),
     path("", include("recipes.urls")),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
