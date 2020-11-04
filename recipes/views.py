@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Tags, Ingredients, Ingredients_recipe
+from .models import Recipe, Tags, Ingredients, Ingredients_recipe, User
 from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
@@ -9,6 +9,7 @@ from .utils import get_ingredients
 def index(request):
     recipe = Recipe.objects.order_by("-pub_date").all()
     return render(request, 'index.html', {'recipe': recipe})
+
 
 def new_recipe(request):
     tag = Tags.objects.order_by("id").all()
@@ -30,3 +31,15 @@ def new_recipe(request):
     else:
         form = RecipeForm(request.POST or None, files=request.FILES or None)
     return render(request, "recipe_new.html", {"form": form, "tag": tag})
+
+
+def profile(request, username):
+    recipe = Recipe.objects.filter(author__username=username).order_by("-pub_date").all()
+    author = get_object_or_404(User, username=username)
+    return render(request, 'profile.html', {'recipe': recipe, 'author': author})
+
+
+def recipe(request, username, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    return render(request, 'recipe.html', {'recipe': recipe})
+

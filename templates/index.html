@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% block title %} Рецепты {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
 
 {% block content %}
-
 
 <div class="main__header">
     <h1 class="main__title">Рецепты</h1>
@@ -25,28 +28,40 @@
 
 {% for recipe in recipe %}
 
-<div class="card" data-id="{{ recipe.id }}">
-    <a href="#" class="link" target="_blank"><img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="card__image"></a>
-    <div class="card__body">
-        <a class="card__title link" href="#" target="_blank">{{ recipe.title }}</a>
-        <ul class="card__items">
-            <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
-            <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
-            <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
-        </ul>
-        <div class="card__items card__items_column">
-            <p class="card__text"><span class="icon-time"></span> {{ recipe.cooking_time }} мин.</p>
-            <p class="card__text"><span class="icon-user"></span> <a href="#" style="color: black">{{ recipe.author.get_full_name }}</a></p>
-        </div>
-    </div>
-    <div class="card__footer">
-        <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
-        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
-    </div>
-</div>
+    {% include 'recipe_item.html' %}
 
 {% endfor %}
 
 </div>
+
+    {% block js %}
+        {% if user.is_authenticated %}
+            <script src="{% static 'js/components/MainCards.js' %}"></script>
+
+            <script src="{% static 'js/components/Purchases.js' %}"></script>
+            <script src="{% static 'js/components/Favorites.js' %}"></script>
+
+            <script src="{% static 'js/config/config.js' %}"></script>
+            <script src="{% static 'js/components/CardList.js' %}"></script>
+            <script src="{% static 'js/components/Header.js' %}"></script>
+
+            <script src="{% static 'js/api/Api.js' %}"></script>
+            <script src="{% static 'js/indexAuth.js' %}"></script>    
+
+        {% else %}
+
+            <script src="{% static 'js/components/MainCards.js' %}"></script>
+
+            <script src="{% static 'js/components/Purchases.js' %}"></script>
+
+            <script src="{% static 'js/config/config.js' %}"></script>
+            <script src="{% static 'js/components/CardList.js' %}"></script>
+            <script src="{% static 'js/components/Header.js' %}"></script>
+
+            <script src="{% static 'js/api/Api.js' %}"></script>
+            <script src="{% static 'js/indexNotAuth.js' %}"></script>
+
+        {% endif %}
+    {% endblock %}
 
 {% endblock %}
