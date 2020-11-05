@@ -16,9 +16,9 @@ def new_recipe(request):
     form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == 'POST':
         ingredients = get_ingredients(request)
-        if not ingredients:
-            form.add_error(None, 'ингредиенты не найдены')
-        elif form.is_valid():
+        #if not ingredients:
+            #form.add_error(None, 'ингредиенты не найдены')
+        if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
@@ -28,6 +28,8 @@ def new_recipe(request):
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
+        else:
+            return render(request, "recipe_new.html", {"form": form, "tag": tag})
     else:
         form = RecipeForm(request.POST or None, files=request.FILES or None)
     return render(request, "recipe_new.html", {"form": form, "tag": tag})
@@ -42,4 +44,32 @@ def profile(request, username):
 def recipe(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     return render(request, 'recipe.html', {'recipe': recipe})
+
+
+def recipe_edit(request, username, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    tag = Tags.objects.order_by("id").all()
+    if request.method == 'POST':
+        form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+        ingredients = get_ingredients(request)
+        if form.is_valid():
+            Ingredients_recipe.objects.filter(recipe=recipe).delete()
+            recipe = form.save(commit=False)
+            recipe.author = request.user
+            recipe.save()
+            for title, units in ingredients.items():
+                ingredient = get_object_or_404(Ingredients, title=title)
+                recipe_ingredient = Ingredients_recipe(ingredient=ingredient, units=units, recipe=recipe)
+                recipe_ingredient.save()
+            form.save_m2m()
+            return redirect('index')
+    else:
+        form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+    return render(request, "recipe_edit.html", {"form": form, "tag": tag, 'recipe': recipe})
+
+
+def recipe_delete(request, username, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    recipe.delete()
+    return redirect('index')
 
