@@ -14,7 +14,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class TagsAdmin(admin.ModelAdmin):
-    list_display = ("pk", 'title', 'color_tags') 
+    list_display = ("pk", 'title', 'color_tags', 'style') 
     empty_value_display = '-пусто-'
 
 

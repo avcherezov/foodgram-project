@@ -26,8 +26,8 @@
                     <div class="tags">
                         {% for tag in tag %}                        
                             <div class="tags__item">
-                                <input type="checkbox" id="{{ tag.pk }}" class="tags__checkbox tags__checkbox_style_{{ tag.color_tags }}">
-                                <label for="{{ tag.pk }}" class="tags__label">{{ tag }}</label>
+                                <input type="checkbox" name="{{ tag.style }}" id="id_{{ tag.style }}" class="tags__checkbox tags__checkbox_style_{{ tag.color_tags }}">
+                                <label for="id_{{ tag.style }}" class="tags__label">{{ tag }}</label>
                             </div>
                         {% endfor %}
                     </div>
@@ -88,7 +88,7 @@
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="{% static 'js/utils/debouncing.js' %}"></script>
 <script src="{% static 'js/api/Api.js' %}"></script>
-<script src="{% static 'formRecipe.js' %}"></script>
+<script src="{% static 'js/formRecipe.js' %}"></script>
 {% endblock %}
 
 {% endblock %}

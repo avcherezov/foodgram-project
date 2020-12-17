@@ -8,6 +8,7 @@ User = get_user_model()
 class Tags(models.Model):
     title = models.CharField(max_length=20)
     color_tags = models.CharField(max_length=20)
+    style = models.CharField(max_length=20)
 
     def __str__(self):
         return self.title

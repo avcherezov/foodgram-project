@@ -28,8 +28,8 @@ def new_recipe(request):
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
-        else:
-            return render(request, "recipe_new.html", {"form": form, "tag": tag})
+        #else:
+        #    return render(request, "recipe_new.html", {"form": form, "tag": tag})
     else:
         form = RecipeForm(request.POST or None, files=request.FILES or None)
     return render(request, "recipe_new.html", {"form": form, "tag": tag})
