@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model() 
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     title = models.CharField(max_length=20)
     color_tags = models.CharField(max_length=20)
     style = models.CharField(max_length=20)
@@ -14,7 +14,7 @@ class Tags(models.Model):
         return self.title
  
 
-class Ingredients(models.Model):
+class Ingredient(models.Model):
     title = models.CharField(max_length=100)
     dimension = models.CharField(max_length=20)
 
@@ -24,8 +24,8 @@ class Ingredients(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=100)
-    tags = models.ManyToManyField(Tags, related_name='tags')
-    ingredients = models.ManyToManyField(Ingredients, through="Ingredients_recipe")
+    tag = models.ManyToManyField(Tag)
+    ingredients = models.ManyToManyField(Ingredient, through="Ingredients_recipe", through_fields=('recipe', 'ingredient'))
     cooking_time = models.IntegerField()
     text = models.TextField()
     image = models.ImageField(upload_to='recipes/', blank=True, null=True)
@@ -37,7 +37,7 @@ class Recipe(models.Model):
 
 
 class Ingredients_recipe(models.Model):
-    ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='ingredient')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='ingredient')
     units = models.IntegerField()
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 

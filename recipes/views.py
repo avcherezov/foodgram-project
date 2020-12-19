@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Tags, Ingredients, Ingredients_recipe, User
+from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User
 from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
@@ -12,27 +12,24 @@ def index(request):
 
 
 def new_recipe(request):
-    tag = Tags.objects.order_by("id").all()
-    form = RecipeForm(request.POST or None, files=request.FILES or None)
     if request.method == 'POST':
+        form = RecipeForm(request.POST or None, files=request.FILES or None)
         ingredients = get_ingredients(request)
-        #if not ingredients:
-            #form.add_error(None, 'ингредиенты не найдены')
+        if not ingredients:
+            form.add_error(None, 'ингредиенты не найдены')
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
             for title, units in ingredients.items():
-                ingredient = get_object_or_404(Ingredients, title=title)
+                ingredient = get_object_or_404(Ingredient, title=title)
                 recipe_ingredient = Ingredients_recipe(ingredient=ingredient, units=units, recipe=recipe)
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
-        #else:
-        #    return render(request, "recipe_new.html", {"form": form, "tag": tag})
     else:
-        form = RecipeForm(request.POST or None, files=request.FILES or None)
-    return render(request, "recipe_new.html", {"form": form, "tag": tag})
+        form = RecipeForm()
+    return render(request, "recipe_new.html", {"form": form})
 
 
 def profile(request, username):
@@ -48,7 +45,7 @@ def recipe(request, username, recipe_id):
 
 def recipe_edit(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    tag = Tags.objects.order_by("id").all()
+    tag1 = recipe.tag.all()
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
         ingredients = get_ingredients(request)
@@ -58,14 +55,14 @@ def recipe_edit(request, username, recipe_id):
             recipe.author = request.user
             recipe.save()
             for title, units in ingredients.items():
-                ingredient = get_object_or_404(Ingredients, title=title)
+                ingredient = get_object_or_404(Ingredient, title=title)
                 recipe_ingredient = Ingredients_recipe(ingredient=ingredient, units=units, recipe=recipe)
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
     else:
-        form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
-    return render(request, "recipe_edit.html", {"form": form, "tag": tag, 'recipe': recipe})
+        form = RecipeForm(instance=recipe)
+    return render(request, "recipe_edit.html", {"form": form, "tag1": tag1, 'recipe': recipe})
 
 
 def recipe_delete(request, username, recipe_id):
