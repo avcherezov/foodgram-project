@@ -21,7 +21,7 @@ from recipes.utils import get_ingredients_new
 
 
 urlpatterns = [
-    #path("auth/", include("users.urls")),
+    path("auth/", include("users.urls")),
     path("auth/", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
     path('ingredients/', get_ingredients_new, name='ingredients'),
