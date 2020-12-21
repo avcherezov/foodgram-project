@@ -4,11 +4,15 @@ from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
 from .utils import get_ingredients
+from django.core.paginator import Paginator
 
 
 def index(request):
     recipe = Recipe.objects.order_by("-pub_date").all()
-    return render(request, 'index.html', {'recipe': recipe})
+    paginator = Paginator(recipe, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'index.html', {'page': page})
 
 
 def new_recipe(request):
