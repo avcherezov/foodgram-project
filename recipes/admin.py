@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe, Tag, Ingredient, Ingredients_recipe
+from .models import Recipe, Tag, Ingredient, Ingredients_recipe, Follow, Favorite
 
 
 class Ingredients_recipeInline(admin.TabularInline):
@@ -23,6 +23,19 @@ class IngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class FollowAdmin(admin.ModelAdmin):
+    list_display = ("pk", 'user', 'author') 
+    empty_value_display = '-пусто-'
+
+
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ("pk", 'user', 'recipe') 
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(Follow, FollowAdmin)
+admin.site.register(Favorite, FavoriteAdmin)
+

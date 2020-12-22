@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User
+from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User, Follow, Favorite
 from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
@@ -19,8 +19,6 @@ def new_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         ingredients = get_ingredients(request)
-        if not ingredients:
-            form.add_error(None, 'ингредиенты не найдены')
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
@@ -74,3 +72,12 @@ def recipe_delete(request, username, recipe_id):
     recipe.delete()
     return redirect('index')
 
+
+def follow(request):
+    recipes_author = Follow.objects.filter(user=request.user)
+    return render(request, 'follow.html', {'recipes_author': recipes_author})
+ 
+
+def favorite(request):
+    recipes_favorite = Recipe.objects.filter(favorite_recipe__user__id=request.user.id).all()
+    return render(request, 'favorite.html', {'recipes_favorite': recipes_favorite})

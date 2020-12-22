@@ -43,3 +43,14 @@ class Ingredients_recipe(models.Model):
 
     def __str__(self):
         return self.ingredient.dimension
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="follower")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorite_user")
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="favorite_recipe")
+
