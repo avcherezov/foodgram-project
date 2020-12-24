@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User, Follow, Favorite
+from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User, Follow, Favorite, ShoppingList
 from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
@@ -81,3 +81,8 @@ def follow(request):
 def favorite(request):
     recipes_favorite = Recipe.objects.filter(favorite_recipe__user__id=request.user.id).all()
     return render(request, 'favorite.html', {'recipes_favorite': recipes_favorite})
+
+
+def shopping_list(request):
+    shopping_list = ShoppingList.objects.filter(user=request.user).all()
+    return render(request, 'shopping_list.html', {'shopping_list': shopping_list})
