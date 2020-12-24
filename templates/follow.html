@@ -30,12 +30,12 @@
                                 </li>
                         {% endfor %}
                     <li class="card-user__item">
-                        <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">Еще...</a>
+                        <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">{% if follow.author.recipe_author.count > 3 %} Еще {{ follow.author.recipe_author.count }} рецептa(ов)... {% endif %}</a>
                     </li>
                 </ul>
             </div>
             <div class="card-user__footer">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться </button>
+                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
             </div>
         </div>
         {% endfor %}
