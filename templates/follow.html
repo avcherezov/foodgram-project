@@ -13,7 +13,7 @@
         <h1 class="main__title">Мои подписки</h1>
     </div>
     <div class="card-list">
-        {% for follow in recipes_author %}
+        {% for follow in page %}
         <div class="card-user" data-author="{{ follow.author.id }}">
             <div class="card-user__header">
                 <h2 class="card-user__title"> {{ follow.author.username }} </h2>
@@ -40,6 +40,8 @@
         </div>
         {% endfor %}
     </div>
+
+{% include 'paginator.html' %}
 
 {% block js %}
 

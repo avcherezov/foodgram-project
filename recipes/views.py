@@ -37,7 +37,10 @@ def new_recipe(request):
 def profile(request, username):
     recipe = Recipe.objects.filter(author__username=username).order_by("-pub_date").all()
     author = get_object_or_404(User, username=username)
-    return render(request, 'profile.html', {'recipe': recipe, 'author': author})
+    paginator = Paginator(recipe, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'profile.html', {'page': page, 'author': author})
 
 
 def recipe(request, username, recipe_id):
@@ -75,12 +78,18 @@ def recipe_delete(request, username, recipe_id):
 
 def follow(request):
     recipes_author = Follow.objects.filter(user=request.user)
-    return render(request, 'follow.html', {'recipes_author': recipes_author})
+    paginator = Paginator(recipes_author, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'follow.html', {'page': page})
  
 
 def favorite(request):
     recipes_favorite = Recipe.objects.filter(favorite_recipe__user__id=request.user.id).all()
-    return render(request, 'favorite.html', {'recipes_favorite': recipes_favorite})
+    paginator = Paginator(recipes_favorite, 3)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'favorite.html', {'page': page})
 
 
 def shopping_list(request):

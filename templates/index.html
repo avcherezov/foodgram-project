@@ -13,11 +13,13 @@
     {% include 'tags.html' %}
 </div>
 <div class="card-list">
-{% for recipe in page %}
 
-    {% include 'recipe_item.html' %}
+    {% for recipe in page %}
 
-{% endfor %}
+        {% include 'recipe_item.html' %}
+
+    {% endfor %}
+    
 </div>
 
 {% include 'paginator.html' %}

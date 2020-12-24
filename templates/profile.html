@@ -17,13 +17,15 @@
 
     <div class="card-list">
 
-        {% for recipe in recipe %}
+        {% for recipe in page %}
 
             {% include 'recipe_item.html' %}
 
         {% endfor %}
 
     </div>
+
+    {% include 'paginator.html' %}
 
     {% block js %}
 
