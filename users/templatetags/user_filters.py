@@ -1,4 +1,5 @@
 from django import template
+from recipes.models import Follow, Favorite, ShoppingList
 
 
 register = template.Library()
@@ -24,3 +25,21 @@ def get_filter_link(request, tag):
     else:
         new_request.appendlist('filters', tag.style)
     return new_request.urlencode()
+
+
+@register.filter(name="follow")
+def follow(author, user):
+    if Follow.objects.filter(user=user, author=author):
+        return True
+
+
+@register.filter(name="favorite")
+def favorite(recipe, user):
+    if Favorite.objects.filter(user=user, recipe=recipe):
+        return True
+
+
+@register.filter(name="shopping_list")
+def shopping_list(recipe, user):
+    if ShoppingList.objects.filter(user=user, recipe=recipe):
+        return True

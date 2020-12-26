@@ -11,10 +11,11 @@
         <h1 class="main__title">{{ author.get_full_name }}</h1>
         {% include 'tags.html' %}
     </div>
+    {% if user != author %}
     <div class="author-subscribe" data-author="{{ author.id }}">
         <p style="padding: 0 0 2em 0;">{% include 'button_subscribe.html' %}</p>
     </div>
-
+    {% endif %}
     <div class="card-list">
 
         {% for recipe in page %}
