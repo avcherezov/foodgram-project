@@ -8,7 +8,11 @@ from django.core.paginator import Paginator
 
 
 def index(request):
+    tags = request.GET.getlist('filters')
     recipe = Recipe.objects.order_by("-pub_date").all()
+    if tags:
+        recipe = recipe.filter(tag__style__in=tags).distinct().all()
+        print(recipe)
     paginator = Paginator(recipe, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -35,7 +39,11 @@ def new_recipe(request):
 
 
 def profile(request, username):
+    tags = request.GET.getlist('filters')
     recipe = Recipe.objects.filter(author__username=username).order_by("-pub_date").all()
+    if tags:
+        recipe = recipe.filter(tag__style__in=tags).distinct().all()
+        print(recipe)
     author = get_object_or_404(User, username=username)
     paginator = Paginator(recipe, 3)
     page_number = request.GET.get('page')
@@ -85,7 +93,11 @@ def follow(request):
  
 
 def favorite(request):
+    tags = request.GET.getlist('filters')
     recipes_favorite = Recipe.objects.filter(favorite_recipe__user__id=request.user.id).all()
+    if tags:
+        recipes_favorite = recipes_favorite.filter(tag__style__in=tags).distinct().all()
+        print(recipe)
     paginator = Paginator(recipes_favorite, 3)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
