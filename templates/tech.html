@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} Технологии {% endblock %}
+{% load static %}
+{% block static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+{% load user_filters %}
+
+{% block content %}
+
+<div class="card-text">
+    <p>Текст страницы "Технологии"</p>
+</div>
+
+{% endblock %}
