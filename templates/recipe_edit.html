@@ -38,8 +38,8 @@
                                 value="{{ tag.id }}"
                                 id="id_{{ tag.style }}" 
                                 class="tags__checkbox tags__checkbox_style_{{ tag.color_tags }}"
-                                {% for x in tag1 %}
-                                {% if x.id == tag.id %} checked {% endif %}
+                                {% for recipe_tag in recipe.tag.all %}
+                                {% if recipe_tag.id == tag.id %} checked {% endif %}
                                 {% endfor %}>
                                 <label for="id_{{ tag.style }}" class="tags__label">{{ tag.title }}</label>
                         </div>

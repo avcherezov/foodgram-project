@@ -62,7 +62,6 @@ def recipe(request, username, recipe_id):
 @login_required
 def recipe_edit(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    tag1 = recipe.tag.all()
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
         ingredients = get_ingredients(request)
@@ -79,7 +78,7 @@ def recipe_edit(request, username, recipe_id):
             return redirect('index')
     else:
         form = RecipeForm(instance=recipe)
-    return render(request, "recipe_edit.html", {"form": form, "tag1": tag1, 'recipe': recipe})
+    return render(request, "recipe_edit.html", {"form": form, 'recipe': recipe})
 
 
 @login_required
