@@ -6,34 +6,37 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    title = models.CharField(max_length=20)
-    color_tags = models.CharField(max_length=20)
-    style = models.CharField(max_length=20)
+    title = models.CharField(max_length=20, verbose_name='Название')
+    color_tags = models.CharField(max_length=20, verbose_name='Цвет')
+    style = models.CharField(max_length=20, unique=True, verbose_name='Вид')
 
     def __str__(self):
         return self.title
  
 
 class Ingredient(models.Model):
-    title = models.CharField(max_length=100)
-    dimension = models.CharField(max_length=20)
+    title = models.CharField(max_length=100, verbose_name='Название ингредиента')
+    dimension = models.CharField(max_length=20, verbose_name='Количество')
 
     def __str__(self):
         return self.title
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=100)
-    tag = models.ManyToManyField(Tag)
+    title = models.CharField(max_length=100, verbose_name='Название рецепта')
+    tags = models.ManyToManyField(Tag)
     ingredients = models.ManyToManyField(Ingredient, through="Ingredients_recipe", through_fields=('recipe', 'ingredient'))
-    cooking_time = models.IntegerField()
-    text = models.TextField()
-    image = models.ImageField(upload_to='recipes/', blank=True, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipe_author')
-    pub_date = models.DateTimeField(auto_now_add=True)
+    cooking_time = models.IntegerField(verbose_name='Время приготовления')
+    text = models.TextField(verbose_name='Описание')
+    image = models.ImageField(upload_to='recipes/', blank=True, null=True, verbose_name='Картинка')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipe_author', verbose_name='Автор рецепта')
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-pub_date']
 
 
 class Ingredients_recipe(models.Model):

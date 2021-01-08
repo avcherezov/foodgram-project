@@ -43,7 +43,7 @@
                     {% endfor %}
                     </div>
                     {% if form.errors %}
-                    {% for error in form.tag.errors %}
+                    {% for error in form.tags.errors %}
                         <span class="form__error">{{ error|escape }}</span>
                     {% endfor %}
                     {% endif %}

@@ -38,7 +38,7 @@
                                 value="{{ tag.id }}"
                                 id="id_{{ tag.style }}" 
                                 class="tags__checkbox tags__checkbox_style_{{ tag.color_tags }}"
-                                {% for recipe_tag in recipe.tag.all %}
+                                {% for recipe_tag in recipe.tags.all %}
                                 {% if recipe_tag.id == tag.id %} checked {% endif %}
                                 {% endfor %}>
                                 <label for="id_{{ tag.style }}" class="tags__label">{{ tag.title }}</label>
@@ -46,7 +46,7 @@
                     {% endfor %}
                     </div>
                     {% if form.errors %}
-                    {% for error in form.tag.errors %}
+                    {% for error in form.tags.errors %}
                         <span class="form__error">{{ error|escape }}</span>
                     {% endfor %}
                     {% endif %}
