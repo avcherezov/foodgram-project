@@ -3,7 +3,7 @@ from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User, Follow, F
 from .forms import RecipeForm
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
-from .utils import get_ingredients
+from .utils import get_ingredients, shopping_list_ingredients
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from .constants import ELEMENTS_PAGE
@@ -112,7 +112,11 @@ def shopping_list(request):
 
 @login_required
 def shopping_list_download(request):
-    pass
+    result = shopping_list_ingredients(request)
+    filename = 'download_list.txt'
+    response = HttpResponse(result, content_type='text/plain')
+    response['Content-Disposition'] = "attachment; filename = 'download_list.txt'"
+    return response
 
 
 def page_not_found(request, exception):

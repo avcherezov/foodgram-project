@@ -54,6 +54,7 @@
 </div>
 
 {% block js %}
+
 {% if user.is_authenticated %}
 
     <script src="{% static 'js/components/Purchases.js' %}"></script>
@@ -77,6 +78,7 @@
     <script src="{% static 'js/singlePageNotAuth.js' %}"></script>
 
 {% endif %}
+
 {% endblock %}
 
 {% endblock %}
