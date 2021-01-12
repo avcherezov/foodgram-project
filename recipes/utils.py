@@ -1,6 +1,6 @@
-from .models import Ingredient, ShoppingList
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+
+from .models import Ingredient, ShoppingList
 
 
 def get_ingredients(request):
@@ -8,13 +8,16 @@ def get_ingredients(request):
     for key, ingredient_name in request.POST.items():
         if 'nameIngredient' in key:
             _ = key.split('_')
-            ingredients[ingredient_name] = int(request.POST[f'valueIngredient_{_[1]}'])
+            ingredients[ingredient_name] = int(request.POST[
+                f'valueIngredient_{_[1]}']
+            )
     return ingredients
 
 
 def get_ingredients_new(request):
     ingredient = request.GET['query']
-    ingredients = list(Ingredient.objects.filter(title__icontains=ingredient).values('title', 'dimension'))
+    ingredients = list(Ingredient.objects.filter(
+        title__icontains=ingredient).values('title', 'dimension'))
     return JsonResponse(ingredients, safe=False)
 
 

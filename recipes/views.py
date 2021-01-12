@@ -1,12 +1,19 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Recipe, Tag, Ingredient, Ingredients_recipe, User, Follow, Favorite, ShoppingList
-from .forms import RecipeForm
-from django.views.generic import View
-from django.http import JsonResponse, HttpResponse
-from .utils import get_ingredients, shopping_list_ingredients
-from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
 from .constants import ELEMENTS_PAGE
+from .forms import RecipeForm
+from .models import (
+    Follow,
+    Ingredient,
+    Ingredients_recipe,
+    Recipe,
+    ShoppingList,
+    User,
+)
+from .utils import get_ingredients, shopping_list_ingredients
 
 
 def index(request):
@@ -31,7 +38,11 @@ def new_recipe(request):
             recipe.save()
             for title, units in ingredients.items():
                 ingredient = get_object_or_404(Ingredient, title=title)
-                recipe_ingredient = Ingredients_recipe(ingredient=ingredient, units=units, recipe=recipe)
+                recipe_ingredient = Ingredients_recipe(
+                    ingredient=ingredient,
+                    units=units,
+                    recipe=recipe,
+                )
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
@@ -59,7 +70,11 @@ def recipe(request, username, recipe_id):
 @login_required
 def recipe_edit(request, username, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe)
+    form = RecipeForm(
+        request.POST or None,
+        files=request.FILES or None,
+        instance=recipe,
+    )
     if request.method == 'POST':
         ingredients = get_ingredients(request)
         if form.is_valid():
@@ -69,11 +84,19 @@ def recipe_edit(request, username, recipe_id):
             recipe.save()
             for title, units in ingredients.items():
                 ingredient = get_object_or_404(Ingredient, title=title)
-                recipe_ingredient = Ingredients_recipe(ingredient=ingredient, units=units, recipe=recipe)
+                recipe_ingredient = Ingredients_recipe(
+                    ingredient=ingredient,
+                    units=units,
+                    recipe=recipe,
+                )
                 recipe_ingredient.save()
             form.save_m2m()
             return redirect('index')
-    return render(request, "recipe_edit.html", {"form": form, 'recipe': recipe})
+    return render(
+        request,
+        "recipe_edit.html",
+        {"form": form, 'recipe': recipe},
+    )
 
 
 @login_required
@@ -95,9 +118,11 @@ def follow(request):
 @login_required
 def favorite(request):
     tags = request.GET.getlist('filters')
-    recipes_favorite = Recipe.objects.filter(favorite_recipe__user__id=request.user.id).all()
+    recipes_favorite = Recipe.objects.filter(
+        favorite_recipe__user__id=request.user.id).all()
     if tags:
-        recipes_favorite = recipes_favorite.filter(tags__style__in=tags).distinct().all()
+        recipes_favorite = recipes_favorite.filter(
+            tags__style__in=tags).distinct().all()
     paginator = Paginator(recipes_favorite, ELEMENTS_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -107,15 +132,18 @@ def favorite(request):
 @login_required
 def shopping_list(request):
     shopping_list = ShoppingList.objects.filter(user=request.user).all()
-    return render(request, 'shopping_list.html', {'shopping_list': shopping_list})
+    return render(
+        request,
+        'shopping_list.html',
+        {'shopping_list': shopping_list},
+    )
 
 
 @login_required
 def shopping_list_download(request):
     result = shopping_list_ingredients(request)
-    filename = 'download_list.txt'
     response = HttpResponse(result, content_type='text/plain')
-    response['Content-Disposition'] = "attachment; filename = 'download_list.txt'"
+    response['Content-Disposition'] = "attachment; filename = 'download.txt'"
     return response
 
 
@@ -124,4 +152,4 @@ def page_not_found(request, exception):
 
 
 def server_error(request):
-    return render(request, "misc/500.html", status=500) 
+    return render(request, "misc/500.html", status=500)

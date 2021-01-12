@@ -1,6 +1,6 @@
-from django.forms import ModelForm
+from django.forms import CheckboxSelectMultiple, ModelForm
+
 from .models import Recipe
-from django.forms import CheckboxSelectMultiple
 
 
 class RecipeForm(ModelForm):

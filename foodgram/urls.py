@@ -13,13 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls import handler404, handler500
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from django.conf import settings
-from django.conf.urls.static import static
 from recipes.utils import get_ingredients_new
-from django.conf.urls import handler404, handler500
-
 
 urlpatterns = [
     path("auth/", include("users.urls")),
@@ -35,4 +34,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = "recipes.views.page_not_found"
-handler500 = "recipes.views.server_error" 
+handler500 = "recipes.views.server_error"

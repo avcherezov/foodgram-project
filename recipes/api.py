@@ -1,8 +1,10 @@
 import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import Recipe, User, Follow, Favorite, ShoppingList
 from django.shortcuts import get_object_or_404
+
+from .models import Favorite, Follow, Recipe, ShoppingList, User
 
 
 @login_required
@@ -10,7 +12,8 @@ def follow_add(request):
     author_id = json.loads(request.body)["id"]
     author = get_object_or_404(User, pk=author_id)
     if request.user != author:
-        if Follow.objects.filter(user=request.user).filter(author=author).exists() == False:
+        if Follow.objects.filter(user=request.user).filter(
+            author=author).exists() is False:
             Follow.objects.create(user=request.user, author=author)
             return JsonResponse({"success": "ok"})
 
@@ -53,6 +56,10 @@ def shopping_list_add(request):
 def shopping_list_delete(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     user = get_object_or_404(User, username=request.user.username)
-    shopping_list_recipe = get_object_or_404(ShoppingList, user=user, recipe=recipe)
+    shopping_list_recipe = get_object_or_404(
+        ShoppingList,
+        user=user,
+        recipe=recipe,
+    )
     shopping_list_recipe.delete()
     return JsonResponse({"success": True})

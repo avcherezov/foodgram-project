@@ -1,6 +1,7 @@
+import csv
+
 from django.core.management.base import BaseCommand
 from recipes.models import Ingredient
-import csv
 
 
 class Command(BaseCommand):
@@ -11,4 +12,7 @@ class Command(BaseCommand):
             reader = csv.reader(file)
             for row in reader:
                 title, dimension = row
-                Ingredient.objects.get_or_create(title=title, dimension=dimension)
+                Ingredient.objects.get_or_create(
+                    title=title,
+                    dimension=dimension,
+                )

@@ -5,9 +5,9 @@ from recipes.models import Follow, Favorite, ShoppingList
 register = template.Library()
 
 
-@register.filter 
+@register.filter
 def addclass(field, css):
-        return field.as_widget(attrs={"class": css})
+    return field.as_widget(attrs={"class": css})
 
 
 @register.filter(name='get_filter_values')
