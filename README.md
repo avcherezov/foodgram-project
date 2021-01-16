@@ -1,2 +1,2 @@
 # foodgram-project
-foodgram-project
+Адрес проекта для проверки - http://84.201.166.209/
