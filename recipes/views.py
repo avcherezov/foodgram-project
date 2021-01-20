@@ -13,7 +13,7 @@ from .models import (
     ShoppingList,
     User,
 )
-from .utils import get_ingredients, shopping_list_ingredients
+from .utils import form_valid, get_ingredients, shopping_list_ingredients
 
 
 def index(request):
@@ -33,18 +33,7 @@ def new_recipe(request):
     if request.method == 'POST':
         ingredients = get_ingredients(request)
         if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
-            for title, units in ingredients.items():
-                ingredient = get_object_or_404(Ingredient, title=title)
-                recipe_ingredient = Ingredients_recipe(
-                    ingredient=ingredient,
-                    units=units,
-                    recipe=recipe,
-                )
-                recipe_ingredient.save()
-            form.save_m2m()
+            form_valid(form, request, ingredients)
             return redirect('index')
     return render(request, "recipe_new.html", {"form": form})
 
@@ -79,18 +68,7 @@ def recipe_edit(request, username, recipe_id):
         ingredients = get_ingredients(request)
         if form.is_valid():
             Ingredients_recipe.objects.filter(recipe=recipe).delete()
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            recipe.save()
-            for title, units in ingredients.items():
-                ingredient = get_object_or_404(Ingredient, title=title)
-                recipe_ingredient = Ingredients_recipe(
-                    ingredient=ingredient,
-                    units=units,
-                    recipe=recipe,
-                )
-                recipe_ingredient.save()
-            form.save_m2m()
+            form_valid(form, request, ingredients)
             return redirect('index')
     return render(
         request,
@@ -143,7 +121,7 @@ def shopping_list(request):
 def shopping_list_download(request):
     result = shopping_list_ingredients(request)
     response = HttpResponse(result, content_type='text/plain')
-    response['Content-Disposition'] = "attachment; filename = 'download.txt'"
+    response['Content-Disposition'] = 'attachment; filename = download.txt'
     return response
 
 

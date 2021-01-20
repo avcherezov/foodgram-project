@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from .models import Ingredient, ShoppingList
+from .models import Ingredient, Ingredients_recipe, ShoppingList
 
 
 def get_ingredients(request):
@@ -36,3 +36,18 @@ def shopping_list_ingredients(request):
     for key, units in ingredients.items():
         download.append(f'{key} - {units} \n')
     return download
+
+
+def form_valid(form, request, ingredients):
+    recipe = form.save(commit=False)
+    recipe.author = request.user
+    recipe.save()
+    for title, units in ingredients.items():
+        ingredient, _ = Ingredient.objects.get_or_create(title=title, defaults={'dimension': 'нет'})
+        recipe_ingredient = Ingredients_recipe(
+            ingredient=ingredient,
+            units=units,
+            recipe=recipe,
+        )
+        recipe_ingredient.save()
+    form.save_m2m()

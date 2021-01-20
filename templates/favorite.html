@@ -20,7 +20,9 @@
 {% endfor %}
 </div>
 
-{% include 'paginator.html' %}
+{% if page.has_other_pages %}
+    {% include 'paginator.html' %}
+{% endif %}
 
 {% block js %}
 
