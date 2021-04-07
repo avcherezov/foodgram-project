@@ -45,6 +45,3 @@ docker-compose exec web python manage.py runserver
 
 ## Стэк
 Django, Gunicorn, Nginx, PostgreSQL, Docker, Яндекс.Облако
-
-## Адрес проекта в сети
-http://84.201.166.209/
